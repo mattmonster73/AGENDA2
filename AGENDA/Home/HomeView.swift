@@ -13,8 +13,7 @@ struct HomeView: View {
     
     @State private var showPlusSheet: Bool = false
     
-    @State private var showPillButtons = false
-    @State private var isPlusButtonClicked = false
+    @State private var isDisplayingPillButtons = false
 
     
     
@@ -140,62 +139,56 @@ struct HomeView: View {
                 
                 
             }
-            .overlay(
-            ZStack {
-                // Your main content here
-                
-                if showPillButtons {
-                    VStack {
-                       Spacer()
-                        VStack(spacing: 10) {
-                            Text("Button 1")
-                                .font(.headline)
-                                .padding()
-                                .background(Color.gray)
-                                .clipShape(Capsule())
-                            
-                            Text("Button 2")
-                                .font(.headline)
-                                .padding()
-                                .background(Color.gray)
-                                .clipShape(Capsule())
-                        }
-                        .transition(.move(edge: .top))
-                        //.frame(width: .infinity, alignment: .bottomTrailing)
-                        
-                    }
-                }
-                
-                VStack {
-                    Spacer()
-                    HStack {
-                        Spacer()
-                        Button(action: {
-                            withAnimation {
-                                isPlusButtonClicked.toggle()
-                                if isPlusButtonClicked {
-                                    showPillButtons = true
-                                } else {
-                                    showPillButtons = false
-                                }
-                            }
-                        }) {
-                            Image(systemName: isPlusButtonClicked ? "xmark.circle.fill" : "plus.circle.fill")
-                                .resizable()
-                                .frame(width: 50, height: 50)
-                                .foregroundColor(.black.opacity(0.7))
-                                .background(Color.white)
-                                .clipShape(Circle())
-                                .shadow(radius: 5)
-                                .rotationEffect(.degrees(isPlusButtonClicked ? 90 : 0))
-                        }
-                        .padding(16)
-                        .clipShape(Circle())
-                        .shadow(radius: 10)
-                    }
-                }
-            }
-            )
+			.overlay(alignment: .bottomTrailing) {
+				
+				VStack(alignment: .trailing, spacing: 10) {
+					if isDisplayingPillButtons {
+						Group {
+							Button {
+								
+							} label: {
+								Text("Button 1")
+									.padding()
+							}
+							
+							Button {
+								
+							} label: {
+								Text("Button 2")
+									.padding()
+							}
+						}
+						.font(.headline)
+						.background(Color.gray)
+						.clipShape(Capsule())
+						.contentShape(Capsule())
+						.foregroundStyle(.primary)
+						.transition(
+							.move(edge: .top)
+							.combined(with: .opacity)
+						)
+					}
+					
+					Button {
+						withAnimation {
+							isDisplayingPillButtons.toggle()
+						}
+					} label: {
+						Image(systemName: isDisplayingPillButtons ? "xmark.circle.fill" : "plus.circle.fill")
+							.resizable()
+							.frame(width: 50, height: 50)
+							.foregroundColor(.black.opacity(0.7))
+							.background(Color.white)
+							.clipShape(Circle())
+							.shadow(radius: 5)
+							.rotationEffect(.degrees(isDisplayingPillButtons ? 90 : 0))
+					}
+					.padding(16)
+					.clipShape(Circle())
+					.shadow(radius: 10)
+				}
+				.padding(.horizontal)
+			}
                  
             // PLUS Button
 //            .overlay(
